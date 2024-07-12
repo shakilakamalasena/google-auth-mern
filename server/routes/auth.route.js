@@ -28,8 +28,14 @@ router.get(
 router.get("/google", passport.authenticate("google", ["profile", "email"]));
 
 router.get("/logout", (req, res) => {
-    req.logout();
-    res.redirect(process.env.CLIENT_URL);
+    // req.logout();
+    // res.redirect(process.env.CLIENT_URL);
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect(process.env.CLIENT_URL);
+    });
 });
 
 module.exports = router;
