@@ -3,14 +3,25 @@ const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
+const session = require("express-session");
 const passportSetup = require("./passport");
+const authRoute = require("./routes/auth.route");
 const app = express();
 
+// app.use(
+//     cookieSession({
+//         name: "session",
+//         keys: ["doinkcozyy"],
+//         maxAge: 24 * 60 * 60 * 100,
+//     })
+// );
+
 app.use(
-    cookieSession({
-        name: "session",
-        keys: ["doinkcozyy"],
-        maxAge: 24 * 60 * 60 * 100,
+    session({
+        secret: "doinkcozyy", // Use a strong secret
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: "auto", maxAge: 24 * 60 * 60 * 1000 }, // Adjust cookie settings as needed
     })
 );
 
@@ -25,5 +36,7 @@ app.use(
     })
 );
 
+app.use("/auth", authRoute);
+
 const port = process.env.PORT || 8080;
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => console.log(`Listening on port ${port}...`));
